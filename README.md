@@ -1,2 +1,2 @@
-# advent-of-code-2022
-My (Python) Solutions for Advent of Code 2020
+# advent-of-code-2021
+My (Python) Solutions for Advent of Code 2021
