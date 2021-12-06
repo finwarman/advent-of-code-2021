@@ -12,16 +12,13 @@ with open(f, 'r') as file:
 numbers = [int(x) for x in data.strip().split(',')]
 
 # ==== SOLUTION ====
-total = 0
 
+# days = 18
 # days = 80
-# days = 18  # demo
 days = 256
 
-ndict = {}
+ndict = {k: 0 for k in range(-1, 9)}
 
-for n in range(-1, 9):
-    ndict[n] = 0
 for number in numbers:
     ndict[number] += 1
 
@@ -30,14 +27,13 @@ for d in range(days):
         x = ndict[n]
         ndict[n] = 0
         ndict[n-1] += x
-    # -1 case
+    # -1 case: create children
     x = ndict[-1]
     ndict[8] += x
     ndict[6] += x
     ndict[-1] = 0
 
 print(sum(ndict.values()))
-
 
 # Part 1 (80 days)
 # Demo: 5934
