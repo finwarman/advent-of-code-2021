@@ -42,3 +42,7 @@ print(sum(ndict.values()))
 # Part 1 (80 days)
 # Demo: 5934
 # Answer: 363101
+
+# Part 2 (256 days)
+# Demo: 26984457539
+# Answer: 1644286074024
