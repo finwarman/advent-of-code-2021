@@ -74,3 +74,12 @@ print("Time:", end - start)  # Time in seconds
 # Part 2 (256 days)
 # Demo: 26984457539
 # Answer: 1644286074024
+
+
+# Benchmark (pypy3):
+
+# Dict: (100000 loops)
+# Time: ~8 seconds (e.g. 7.1758s)
+
+# List: (100000 loops)
+# Time: ~1 seconds (e.g. 0.8941s)
