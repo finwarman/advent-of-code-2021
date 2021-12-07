@@ -5,7 +5,7 @@ import math
 # ==== INPUT ====
 data = ""
 f = '07.txt'
-f = 'demo.txt'
+#f = 'demo.txt'
 with open(f, 'r') as file:
     data = file.read()
 
