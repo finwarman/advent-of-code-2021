@@ -1,10 +1,6 @@
 #! /usr/bin/env python3
 import re
 import math
-import pprint
-from typing import Sized
-
-pp = pprint.PrettyPrinter(indent=4)
 
 # ==== INPUT ====
 f = '08.txt'
@@ -84,8 +80,6 @@ for row in rows:
         'bottomright': set(bottomright),
     }
 
-    # pp.pprint(l)
-
     for key, s in candidates.items():
         if len(key) == 6:
             # topright, or middle
@@ -113,7 +107,6 @@ for row in rows:
             l[key] -= singles
 
     # determine 2, 3, 5s
-    pp.pprint(l)
 
     for key, s in candidates.items():
         if len(key) == 5:
@@ -137,15 +130,13 @@ for row in rows:
             else:
                 digits -= found
 
-    pp.pprint(results)
-
     ten = 1
     t = 0
     for val in rhs[::-1]:
         x = results[frozenset(list(val))]
         t += ten * x
         ten = ten * 10
-    print(t)
+    # print(t)
     total += t
 
 print(total)
