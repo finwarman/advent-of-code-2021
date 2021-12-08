@@ -29,8 +29,6 @@ knownlengths = {
 #  3    |    7     DONE
 #  2    |    1     DONE
 
-# done:  0, 1, 2, _, 4, 5, _, 7, 8, 9
-
 total = 0
 
 for row in rows:
@@ -140,36 +138,3 @@ for row in rows:
     total += t
 
 print(total)
-'''
-acedgfb: 8
-cdfbe: 5
-gcdfa: 2
-fbcad: 3
-dab: 7
-cefabd: 9
-cdfgeb: 6
-eafb: 4
-cagedb: 0
-ab: 1
-
-cdfeb: 5
-fcadb: 3
-cdfeb: 5
-cdbaf: 3
-
-Len Digits  |  Value
-7               8
-3               7
-4               4
-2               1
-
- dddd
-e    a
-e    a
- ffff
-g    b
-g    b
- cccc
-
-
-'''
