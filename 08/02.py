@@ -11,7 +11,6 @@ with open(f, 'r') as file:
 rows = [row.strip() for row in data.split('\n')[:-1]]
 
 # ==== SOLUTION ====
-digits = {}
 
 knownlengths = {
     2: 1,
@@ -32,8 +31,6 @@ knownlengths = {
 total = 0
 
 for row in rows:
-    complete = set()
-
     chars = {}
     candidates = {}
 
@@ -59,25 +56,19 @@ for row in rows:
         if len(s) == 1:
             chars[list(s)[0]] = key
 
-        # 1, 4, 7, 8
-    topmiddle = chars[7] - chars[1]
-    topleft = chars[4] - chars[1]  # candidates
-    topright = chars[1]
-    middle = chars[4] - chars[1]
-    bottomleft = chars[8] - chars[7] - chars[4]
-    bottommiddle = chars[8] - chars[7] - chars[4]
-    bottomright = chars[1]
-
+    # track valid possible candidate segment wirings (based off 1, 4, 7, 8)
     l = {
-        'topleft': set(topleft),
-        'topmiddle': set(topmiddle),
-        'topright': set(topright),
-        'middle': set(middle),
-        'bottomleft': set(bottomleft),
-        'bottommiddle': set(bottommiddle),
-        'bottomright': set(bottomright),
+        'topleft': set(chars[4] - chars[1]),
+        'topmiddle': set(chars[7] - chars[1]),
+        'topright': set(chars[1]),
+        'middle': set(chars[4] - chars[1]),
+        'bottomleft': set(chars[8] - chars[7] - chars[4]),
+        'bottommiddle': set(chars[8] - chars[7] - chars[4]),
+        'bottomright': set(chars[1]),
     }
+    segs = len(l.keys())
 
+    # determine 0, 6, and possibly 9
     for key, s in candidates.items():
         if len(key) == 6:
             # topright, or middle
@@ -94,8 +85,9 @@ for row in rows:
                 candidates[key] = set([9])
                 chars[9] = key
 
+    # filter new valid segment wirings
     singles = set()
-    for i in range(7):
+    for i in range(segs):
         for v in l.values():
             if len(v) == 1:
                 singles.add(list(v)[0])
@@ -105,7 +97,6 @@ for row in rows:
             l[key] -= singles
 
     # determine 2, 3, 5s
-
     for key, s in candidates.items():
         if len(key) == 5:
             if list(l['topright'])[0] not in key:
@@ -118,9 +109,10 @@ for row in rows:
                 candidates[key] = set([3])
                 chars[3] = key
 
+    # collate results, find remaining allocations by filter duplicates
     results = {}
     found = set()
-    for i in range(7):
+    for i in range(segs):
         for chars, digits in candidates.items():
             if len(digits) == 1:
                 found.add(list(digits)[0])
@@ -128,7 +120,7 @@ for row in rows:
             else:
                 digits -= found
 
-    ten = 1
+    ten = 1  # powers of ten
     t = 0
     for val in rhs[::-1]:
         x = results[frozenset(list(val))]
