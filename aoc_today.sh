@@ -35,7 +35,9 @@ import math
 
 # ==== INPUT ====
 data = ""
-with open('$DD.txt', 'r') as file:
+f = '$DD.txt'
+#f = 'demo.txt'
+with open(f, 'r') as file:
     data = file.read()
 
 rows = [row.strip() for row in data.split('$nl')[:-1]]
