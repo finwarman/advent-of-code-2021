@@ -15,9 +15,9 @@ total = 0
 
 for row in rows:
     lhs, rhs = row.split(" | ")
-    lhs = lhs.split(" ")
     rhs = rhs.split(" ")
 
+    # total += sum([1 for dig in rhs if len(dig) in [2, 4, 3, 7]])
     for dig in rhs:
         if len(dig) in [2, 4, 3, 7]:
             total += 1
