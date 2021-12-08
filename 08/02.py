@@ -138,3 +138,4 @@ for row in rows:
     total += t
 
 print(total)
+# 974512
