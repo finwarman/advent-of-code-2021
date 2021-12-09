@@ -34,7 +34,7 @@ for y in range(H):
         if low:
             lows.append((x, y))
 
-basins = []
+basins = set()
 for low in lows:
     x, y = low
     candidates = [(x, y)]
@@ -50,8 +50,9 @@ for low in lows:
                 if p not in points:
                     candidates.append(p)
                 points.add(p)
-    basins.append(list(points))
+    basins.add(frozenset(points))
 
+basins = list(basins)
 basins.sort(key=len, reverse=True)
 prod = 1
 for x in basins[0:3]:
