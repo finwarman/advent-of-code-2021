@@ -26,8 +26,9 @@ points = {
     '<': 4,
 }
 
-incomplete = []
+scores = []
 for row in rows:
+    score = 0
     corrupted = False
     last_opened = [row[0]]
     for char in row[1:]:
@@ -39,20 +40,10 @@ for row in rows:
         else:
             last_opened.append(char)
     if not corrupted:
-        incomplete.append(row)
-
-scores = []
-for row in incomplete:
-    score = 0
-    last_opened = [row[0]]
-    for char in row[1:]:
-        if char in closings:
-            opened = last_opened.pop()
-        else:
-            last_opened.append(char)
-    for x in last_opened[::-1]:
-        score *= 5
-        score += points[x]
-    scores.append(score)
+        for x in last_opened[::-1]:
+            score *= 5
+            score += points[x]
+        scores.append(score)
 
 print(sorted(scores)[len(scores)//2])
+# 2870201088
