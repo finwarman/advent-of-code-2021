@@ -49,7 +49,5 @@ def dfs(curr_node, visited, path):
 
 dfs('start', defaultdict(int), [])
 
-# for path in paths:
-#     print(path)
-
 print(len(paths))
+# 3292
