@@ -7,7 +7,7 @@ from collections import defaultdict
 # ==== INPUT ====
 data = ""
 f = '12.txt'
-#f = 'demo.txt'
+# f = 'demo.txt'
 with open(f, 'r') as file:
     data = file.read()
 
@@ -40,23 +40,17 @@ def dfs(curr_node, visited, path, small_allowed):
 
     if curr_node == 'end':
         paths.add(','.join(path))
-    else:
-        if (curr_node in lowers and visited[curr_node] > 1):
-            if curr_node == 'start':
-                return
-            elif small_allowed:
-                small_allowed = False
-                pass
-            else:
-                return
+        return
+    elif (curr_node in lowers and visited[curr_node] > 1):
+        if not small_allowed or curr_node == 'start':
+            return
+        small_allowed = False
 
-        for node in links[curr_node]:
-            dfs(node, visited.copy(), path + [curr_node], small_allowed)
+    for node in links[curr_node]:
+        dfs(node, visited.copy(), path + [curr_node], small_allowed)
 
 
 dfs('start', defaultdict(int), [], True)
 
-# for path in paths:
-#     print(path)
-
 print(len(paths))
+# 89592
