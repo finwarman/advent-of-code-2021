@@ -36,15 +36,11 @@ for _ in range(40):
         pair_count = pairs[pair]
         if pair_count:
             new = ins[pair]
-            lhs, rhs = (pair[0]+new, new+pair[1])
-
-            count[new] += pair_count
             p[pair] -= pair_count
 
-            if lhs in ins:
-                p[lhs] += pair_count
-            if rhs in ins:
-                p[rhs] += pair_count
+            count[new] += pair_count
+            p[pair[0]+new] += pair_count
+            p[new+pair[1]] += pair_count
     pairs = p
 
 c = set(count.values())
