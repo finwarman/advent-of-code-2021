@@ -47,7 +47,7 @@ def dijkstra(memo, x_max, y_max, levels):
         q.put((99, k))
     memo[(0, 0)] = 0
     while not q.empty():
-        node = q.get()
+        pri, node = q.get()
         neighbors = neighbours(*node, x_max, y_max)
         for n in neighbors:
             d = memo[node] + levels[n]
