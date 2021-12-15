@@ -9,7 +9,7 @@ import networkx as nx
 # ==== INPUT ====
 data = ""
 f = '15.txt'
-#f = 'demo.txt'
+# f = 'demo.txt'
 with open(f, 'r') as file:
     data = file.read()
 
@@ -29,13 +29,13 @@ grid = np.array(grid)
 
 # built 5x larger grid
 for n in range(4):
-    p = [[max(1, (x+1) % 10) for x in row]
+    p = [[x % 9 + 1 for x in row]
          for row in grid[n*H:(n+1)*H, 0:W]]
     grid = np.append(grid, p, 0)
 
 last = grid.copy()
 for n in range(4):
-    p = [[max(1, (x+1) % 10) for x in row]
+    p = [[x % 9 + 1 for x in row]
          for row in last]
     grid = np.append(grid, p, 1)
     last = p
