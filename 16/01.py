@@ -5,7 +5,7 @@ import math
 # ==== INPUT ====
 data = ""
 f = '16.txt'
-#f = 'demo.txt'
+f = 'demo.txt'
 with open(f, 'r') as file:
     data = file.read()
 
@@ -33,13 +33,12 @@ class Packet:
 
     # pretty printing
     def __str__(self, indent=""):
-        childString = "None"
+        childString = ""
         if self.children:
-            childString = "\n"
             for c in self.children:
                 childString += "\n{} - {}".format(indent,
-                                                  c.__str__(indent + " "))
-        return "v: {1}, t: {2} ({3}: {4})\n{0}  children: {5}".format(
+                                                  c.__str__(indent + "  "))
+        return "v: {1}, t: {2} ({3}: {4}) {5}".format(
             indent, self.v, self.t, self.type, self.value, childString)
 
 
@@ -51,7 +50,7 @@ def parsePackets(binString, ptr=0, packetsToFind=-1, maxPtrLength=-1):
     packets = []
 
     foundPackets = 0
-    while (ptr < len(binString) - 7) and (ptr < maxPtrLength or maxPtrLength < 0) and (foundPackets <= packetsToFind or packetsToFind < 1):
+    while (ptr < len(binString) - 7) and (ptr < maxPtrLength or maxPtrLength < 0) and (foundPackets < packetsToFind or packetsToFind < 1):
         foundPackets += 1
         v = int(binString[ptr:ptr+3], 2)
         t = int(binString[ptr+3:ptr+6], 2)
@@ -78,12 +77,10 @@ def parsePackets(binString, ptr=0, packetsToFind=-1, maxPtrLength=-1):
                     ptr += 5
             literal = int(literal, 2)
             packet.value = literal
-            print("literal", literal)
         else:
             packet.type = "operator"
             i = binString[ptr]
             ptr += 1
-            print("operator", i)
             if i == "0":
                 subpacketLen = int(binString[ptr:ptr+15], 2)
                 ptr += 15
@@ -97,11 +94,9 @@ def parsePackets(binString, ptr=0, packetsToFind=-1, maxPtrLength=-1):
                 children, ptrInc = parsePackets(
                     binString[ptr:], 0, packetsToFind=subpacketCount)
                 packet.children = children
-                # print(ptrInc)
                 ptr += ptrInc
-
             else:
-                print("\nUNKNOWN I VALUE", i)
+                raise Exception("Unknown I-Value", i)
     return packets, ptr
 
 
@@ -112,3 +107,4 @@ if packets:
     print(packets[0])
 
 print("Version Sum:", vSum)
+# 967
