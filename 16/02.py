@@ -1,8 +1,5 @@
 #! /usr/bin/env python3
-import re
-import math
-from operator import mul
-from functools import reduce
+from math import prod
 
 # ==== INPUT ====
 data = ""
@@ -23,7 +20,6 @@ def hexToBin(x):
 binString = ""
 for x in hexIn:
     binString += (hexToBin(x))
-
 
 operators = {
     0: "sum",
@@ -48,10 +44,12 @@ class Packet:
     def __str__(self, indent=""):
         childString = ""
         if self.children:
-            for c in self.children:
-                childString += "\n{} - {}".format(indent,
-                                                  c.__str__(indent + "  "))
-        return "v: {1}, t: {2} ({3}: {4}) {5}".format(
+            for c in self.children[:-1]:
+                childString += "\n{}├ {}".format(
+                    indent, c.__str__(indent + "│ "))
+            childString += "\n{}└ {}".format(
+                indent, self.children[-1].__str__(indent + "  "))
+        return "v{1} t: {2} ({3}: {4}) {5}".format(
             indent, self.v, self.t, self.type, self.value, childString)
 
 
@@ -116,7 +114,7 @@ def packetEval(packet: Packet):
         if op == "sum":
             return sum(a)
         elif op == "product":
-            return reduce(mul, a, 1)
+            return prod(a)
         elif op == "min":
             return min(a)
         elif op == "max":
@@ -131,12 +129,12 @@ def packetEval(packet: Packet):
             raise Exception("Unknown Operator", packet.value)
 
 
-packets, ptr = parsePackets(
-    binString, 0, packetsToFind=1, maxPtrLength=len(binString))
-
+packets, ptr = parsePackets(binString, packetsToFind=1)
 
 if packets:
     print(packets[0])
     print(packetEval(packets[0]))
 else:
     print("Parsing Error")
+
+# 12883091136209
