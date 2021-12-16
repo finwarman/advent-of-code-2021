@@ -17,7 +17,9 @@ fi
 echo ""
 
 # aocd requires e.g. export AOC_SESSION=xxxxxxxxxxxxxxxxxxx
-export AOC_SESSION=12345
+# place into '.aoc_session'
+session_file=".aoc_session"
+export AOC_SESSION=$(cat "$session_file")
 
 echo "Fetching todays input to ./$DD/$DD.txt..."
 aocd > "./$DD/$DD.txt"
