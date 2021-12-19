@@ -6,7 +6,7 @@ from functools import reduce
 # ==== INPUT ====
 data = ""
 f = '18.txt'
-#f = 'demo.txt'
+# f = 'demo.txt'
 with open(f, 'r') as file:
     data = file.read()
 
@@ -81,95 +81,8 @@ def parserow(row):
     top_node = top_node.left
     return top_node
 
-# print("\ntraversing\n")
 
-
-# def postorder(root, depth, parent=None, side=None):
-#     # return if the current node is empty
-#     if root is None:
-#         return False
-
-#     if type(root) is int:
-#         if root >= 10:
-#             print("SPLIT: {}".format(root))
-#             p = Pair(root//2, (root+1)//2, parent)
-#             if side == 'right':
-#                 parent.right = p
-#             else:
-#                 parent.left = p
-#             return True
-#         return
-
-#     root.side = side
-
-#     if depth == 4:
-#         print("EXPLODE", side, root)
-#         lhs = root.left
-#         rhs = root.right
-
-#         node = root
-#         seen = {root}
-
-#         while node.parent:
-#             node = node.parent
-#             if type(node.left) is int:
-#                 node.left += lhs
-#                 print(node.left, "left")
-#                 break
-#             if node.left and node.left not in seen:
-#                 p = node
-#                 node = node.left
-#                 while type(node.right) is Pair:
-#                     node = node.right
-#                 print(node.right)
-#                 node.right += lhs
-#                 break
-#             seen.add(node)
-
-#         # if side == 'right':
-#         #     parent.right = 0
-#         # else:
-#         #     parent.left = 0
-
-#         node = root
-#         seen = {root}
-
-#         while node.parent:
-#             node = node.parent
-#             if type(node.right) is int:
-#                 node.right += rhs
-#                 print(node.right, "right")
-#                 break
-#             if node.right and node.right not in seen:
-#                 p = node
-#                 node = node.right
-#                 while type(node.left) is Pair:
-#                     node = node.left
-#                 print(node.left)
-#                 node.left += rhs
-#                 break
-#             seen.add(node)
-
-#         if side == 'right':
-#             parent.right = 0
-#         else:
-#             parent.left = 0
-
-#         return True
-
-#     # Traverse the left subtree
-#     # if type(root.left) is not int:
-#     x = postorder(root.left, depth+1, root, 'left')
-#     if x is True:
-#         return root
-
-#     # Traverse the right subtree
-#     # if type(root.right) is not int:
-#     postorder(root.right, depth+1, root, 'right')
-
-#     return root
-
-def explode(pair, level, side=None):
+def explode_row(pair, level, side=None):
     if type(pair) is int or pair is None:
         return
     pair.side = side
@@ -179,14 +92,14 @@ def explode(pair, level, side=None):
 
         lhs = pair.left
         rhs = pair.right
-        # print("EXPLODE", pair)
-        # print(pair.parent)
+
+        visited = set()
 
         node = pair
-        seen = {pair}
         while node.parent:
+            visited.add(node)
             node = node.parent
-            if (node.left or type(node.left) is int) and node.left not in seen:
+            if (node.left or type(node.left) is int) and node.left not in visited:
                 p = node
                 node = node.left
                 if type(node) is int:
@@ -196,13 +109,13 @@ def explode(pair, level, side=None):
                     node = node.right
                 node.right += lhs
                 break
-            seen.add(node)
 
+        visited = set()
         node = pair
-        seen = {pair}
         while node.parent:
+            visited.add(node)
             node = node.parent
-            if (node.right or type(node.right) is int) and node.right not in seen:
+            if (node.right or type(node.right) is int) and node.right not in visited:
                 p = node
                 node = node.right
                 if type(node) is int:
@@ -212,7 +125,6 @@ def explode(pair, level, side=None):
                     node = node.left
                 node.left += rhs
                 break
-            seen.add(node)
 
         if side == 'right':
             parent.right = 0
@@ -220,18 +132,17 @@ def explode(pair, level, side=None):
             parent.left = 0
 
     if type(pair.left) is not None:
-        explode(pair.left, level + 1, 'left')
+        explode_row(pair.left, level + 1, 'left')
 
     if type(pair.right) is not None:
-        explode(pair.right, level + 1, 'right')
+        explode_row(pair.right, level + 1, 'right')
 
 
-def split(pair, parent, side=None):
+def split_row(pair, parent, side=None):
     if pair is None:
         return False
     if type(pair) is int:
         if pair >= 10:
-            # print("split", pair)
             p = Pair(pair//2, (pair+1)//2, parent)
             if side == 'right':
                 parent.right = p
@@ -240,43 +151,28 @@ def split(pair, parent, side=None):
             return True
         else:
             return False
-    if split(pair.left, pair, 'left'):
-        return True
-    if split(pair.right, pair, 'right'):
-        return True
-    return False
+    else:
+        modified = split_row(pair.left, pair, 'left')
+        if not modified:
+            modified = split_row(pair.right, pair, 'right')
+        return modified
 
 
 def reducerow(top_node):
     previous = ""
     while str(top_node) != previous:
-        # for i in range(10):
         previous = str(top_node)
-        explode(top_node, 0)
-        split(top_node, None)
-        # print()
+        explode_row(top_node, 0)
+        split_row(top_node, None)
     return top_node
 
 
 def addrow(rowa, rowb):
-    # rowa = reducerow(rowa)
-    # rowb = reducerow(rowb)
-    # return reducerow(Pair(rowa, rowb))
     p = Pair(rowa, rowb)
     rowa.parent = p
     rowb.parent = p
-    print(p)
-    print("=================")
     return reducerow(p)
 
-
-# row = "[[[[[9,8],1],2],3],4]"
-# row = "[7,[6,[5,[4,[3,2]]]]]"
-# row = "[[6,[5,[4,[3,2]]]],1]"
-# row = "[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
-#row = "[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]"
-# row = "[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]"
-# build tree
 
 def magnitude(node, side=None):
     if node is None:
@@ -287,7 +183,6 @@ def magnitude(node, side=None):
     total = 0
     total += 3*magnitude(node.left)
     total += 2*magnitude(node.right)
-
     return total
 
 
@@ -296,36 +191,4 @@ rows = [parserow(x) for x in rows]
 tree = reduce(addrow, rows)
 print(tree)
 print(magnitude(tree))
-
-# row = parserow(row)
-# print(row)
-# print()
-# print(reducerow(row))
-
-# result = rows[0]
-# for row in rows[1:6]:
-#     result = addrow(result, row)
-#     print(result)
-
-# print(rows[0])
-# print(reducerow(parserow(row)))
-
-# y = addrow(rows[0], rows[1])
-# print(y)
-
-# x = parserow(row)
-# print(x)
-# print(y)
-# print(str(x) == str(y))
-# print()
-
-# x = reducerow(parserow(row))
-# y = reducerow(addrow(rows[0], rows[1]))
-# print(x)
-# print(y)
-# print(str(x) == str(y))
-# print()
-
-# print(rows[0])
-
-# print(reducerow(parserow(row)))
+# 4417
